@@ -8,6 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import Popup from './Component/Popup';
 
 
 const locales = {
@@ -24,22 +25,25 @@ const localizer = dateFnsLocalizer({
 
 const events = [
   {
+    id: 1,
     title: "Bach-Booty-Call",
-    // allDay: true,
     start: new Date(2022, 6, 16),
     end: new Date(2022, 6, 17)
   },
   {
+    id: 2,
     title: "Project-Presentation",
     start: new Date(2022, 6, 15, 12),
     end: new Date(2022, 6, 15, 13)
   },
   {
+    id: 3,
     title: "Bach Doctor Apointment (for Gonorrhea)",
     start: new Date(2022, 6, 14),
     end: new Date(2022, 6, 14)
   },
   {
+    id: 4,
     title: "Ignacio's interview @ Google",
     start: new Date(2022, 6, 18),
     end: new Date(2022, 6, 18)
@@ -49,12 +53,9 @@ const events = [
 
 
 function App() {
-  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
   const [allEvents, setAllEvents] = useState(events)
-
-
-
-
+  const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
+  const [buttonPopup, setButtonPopup] = useState(false)
 
   // function postNewEvent(e){
   //     fetch('', {
@@ -73,13 +74,21 @@ function App() {
   // }
 
 
+  console.log(allEvents)
+  function removeEventHandler(e){
+    console.log(`removed ${e.id}`)
+    setAllEvents(allEvents.filter((event) => {
+      return event.id !== e.id
+    }))
+  }
 
-// function removeEvent(){
-
-// }
 
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
+  }
+
+  function handlePopup() {
+    setButtonPopup(true)
   }
 
   return (
@@ -109,9 +118,14 @@ function App() {
 
       <Calendar localizer={localizer}
         events={allEvents}
+        onSelectEvent={handlePopup}
         startAccessor="start" endAccessor="end"
         style={{ height: 800, margin: "50px" }} 
         />
+
+      <Popup trigger = {buttonPopup} setTrigger = {setButtonPopup}>
+        <h3>My Popup</h3>
+      </Popup>
     </div>
   );
 }
