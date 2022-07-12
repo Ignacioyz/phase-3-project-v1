@@ -23,78 +23,47 @@ const localizer = dateFnsLocalizer({
   locales
 })
 
-const events = [
-  {
-    id: 1,
-    title: "Bach-Booty-Call",
-    start: new Date(2022, 6, 16),
-    end: new Date(2022, 6, 17)
-  },
-  {
-    id: 2,
-    title: "Project-Presentation",
-    start: new Date(2022, 6, 15, 12),
-    end: new Date(2022, 6, 15, 13)
-  },
-  {
-    id: 3,
-    title: "Bach Doctor Apointment (for Gonorrhea)",
-    start: new Date(2022, 6, 14),
-    end: new Date(2022, 6, 14)
-  },
-  {
-    id: 4,
-    title: "Ignacio's interview @ Google",
-    start: new Date(2022, 6, 18),
-    end: new Date(2022, 6, 18)
-  },
-]
 
-
+console.log(new Date)
 
 function App() {
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
   const [allEvents, setAllEvents] = useState([])
+  const [buttonPopup, setButtonPopup] = useState(false)
 
-function getData() {
-  fetch("http://localhost:4000/events")
-.then(response => response.json())
-.then(data => setAllEvents(data))
-}
+  useEffect(() => {
+    getData()
+  }, [])
 
-console.log(allEvents)
+  let events = []
 
-useEffect(() => {
-  getData()
-},[])
+  function getData() {
+    fetch("http://localhost:4000/events")
+      .then(response => response.json())
+      .then(data => {
+            events = data.map((item) => {
+              const id = item.id
+              const title = item.title
+              const start = new Date(item.start)
+              const end = new Date(item.end)
 
+    return {
+            id: id,
+            title: title,
+            start: start,
+            end: end}
+        })
+        setAllEvents(events)
+      })   
+  }
 
-
-  // function postNewEvent(e){
-  //     fetch('', {
-  //       method:'POST',
-  //       headers: {
-  //         'Accept':'application/json',
-  //         'Content-Type':'application/json'},
-  //         body: JSON.stringify(
-  //           ({
-  //           'name': e.target.title.value,
-  //           'start': e.target.start.value,
-  //           'end': e.target.end.value,
-  //   }),
-  // )
-  //   })  
-  // }
-
-
-  console.log(allEvents)
-  function removeEventHandler(e){
+  function removeEventHandler(e) {
+    console.log(e)
     console.log(`removed ${e.id}`)
     setAllEvents(allEvents.filter((event) => {
       return event.id !== e.id
     }))
   }
-
 
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
@@ -132,12 +101,13 @@ useEffect(() => {
       <Calendar localizer={localizer}
         events={allEvents}
         onSelectEvent={handlePopup}
+        onKeyPressEvent={removeEventHandler}
         startAccessor="start" endAccessor="end"
-        style={{ height: 800, margin: "50px" }} 
-        />
+        style={{ height: 800, margin: "50px" }}
+      />
 
-      <Popup trigger = {buttonPopup} setTrigger = {setButtonPopup}>
-        <h3>My Popup</h3>
+      <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+        <h3>My Event</h3>
       </Popup>
     </div>
   );
