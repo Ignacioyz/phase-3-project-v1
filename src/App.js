@@ -5,7 +5,7 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
@@ -25,7 +25,6 @@ const localizer = dateFnsLocalizer({
 const events = [
   {
     title: "Bach-Booty-Call",
-    // allDay: true,
     start: new Date(2022, 6, 16),
     end: new Date(2022, 6, 17)
   },
@@ -50,9 +49,19 @@ const events = [
 
 function App() {
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
-  const [allEvents, setAllEvents] = useState(events)
+  const [allEvents, setAllEvents] = useState([])
 
+function getData() {
+  fetch("http://localhost:4000/events")
+.then(response => response.json())
+.then(data => setAllEvents(data))
+}
 
+console.log(allEvents)
+
+useEffect(() => {
+  getData()
+},[])
 
 
 
