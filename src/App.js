@@ -77,11 +77,19 @@ function App() {
 
 
   function removeEventHandler(e) {
-    console.log(e)
-    console.log(`removed ${e.id}`)
-    setAllEvents(allEvents.filter((event) => {
-      return event.id !== e.id
-    }))
+    // console.log(e)
+    // console.log(`removed ${e.id}`)
+    // setAllEvents(allEvents.filter((event) => {
+    //   return event.id !== e.id
+    // }))
+    // setButtonPopup(!buttonPopup)
+    fetch(`http://localhost:4000/events/${e.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    getData()
     setButtonPopup(!buttonPopup)
   }
 

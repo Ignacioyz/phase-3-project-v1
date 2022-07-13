@@ -51,6 +51,21 @@ function PopupContent({eventDetail}) {
         }
     },[startForm])
 
+    useEffect(() => {
+        const newEndDate = {...eventDetail, end : endForm}
+        console.log(newEndDate)
+        
+        if(eventDetail){
+            fetch(`http://localhost:4000/events/${eventDetail.id}`, {
+            method: "PATCH",
+            headers: {
+            "Content-Type": "application/json"
+        },
+            body: JSON.stringify(newEndDate)
+        })
+        }
+    },[endForm])
+
     return (
         <div>
             <h3>My Event</h3>
