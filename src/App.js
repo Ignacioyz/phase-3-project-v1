@@ -8,7 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import Popup from './Component/Popup';
+import Popup from './Component/Popup1';
 
 
 const locales = {
@@ -30,6 +30,8 @@ function App() {
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
   const [allEvents, setAllEvents] = useState([])
   const [buttonPopup, setButtonPopup] = useState(false)
+  const [clickEvent, setClickEvent] = useState({})
+  const [clickEventArr, setClickEventArr] = useState([])
 
   useEffect(() => {
     getData()
@@ -41,21 +43,38 @@ function App() {
     fetch("http://localhost:4000/events")
       .then(response => response.json())
       .then(data => {
-            events = data.map((item) => {
-              const id = item.id
-              const title = item.title
-              const start = new Date(item.start)
-              const end = new Date(item.end)
+        events = data.map((item) => {
+          const id = item.id
+          const title = item.title
+          const start = new Date(item.start)
+          const end = new Date(item.end)
 
-    return {
+          return {
             id: id,
             title: title,
             start: start,
-            end: end}
+            end: end
+          }
         })
         setAllEvents(events)
-      })   
+      })
   }
+
+  function handleAddEvent() {
+    fetch(`http://localhost:4000/events`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: newEvent.title,
+        start: newEvent.start,
+        end: newEvent.end
+      })
+    }).then(response => response.json())
+      .then((newEvent) => setAllEvents([...allEvents, newEvent]))
+  }
+
 
   function removeEventHandler(e) {
     console.log(e)
@@ -63,15 +82,16 @@ function App() {
     setAllEvents(allEvents.filter((event) => {
       return event.id !== e.id
     }))
+    setButtonPopup(!buttonPopup)
   }
 
-  function handleAddEvent() {
-    setAllEvents([...allEvents, newEvent])
-  }
-
-  function handlePopup() {
+  function handlePopup(e) {
+    setClickEvent(e)
+    setClickEventArr(e)
     setButtonPopup(true)
   }
+
+  console.log(allEvents)
 
   return (
     <div className="App">
@@ -82,7 +102,8 @@ function App() {
           value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} />
 
         <DatePicker id='start-input' placeholderText='Start Date'
-          selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })} showTimeSelect
+          selected={newEvent.start} onChange={(start) => setNewEvent({ ...newEvent, start })}
+          showTimeSelect
           timeFormat="HH:mm"
           timeIntervals={15}
           timeCaption="time"
@@ -98,17 +119,22 @@ function App() {
         <button id='submit-button' onClick={handleAddEvent} >Add Event</button>
       </div>
 
-      <Calendar localizer={localizer}
+      <Calendar
+        localizer={localizer}
         events={allEvents}
         onSelectEvent={handlePopup}
-        onKeyPressEvent={removeEventHandler}
         startAccessor="start" endAccessor="end"
-        style={{ height: 800, margin: "50px" }}
-      />
+        style={{ height: 800, margin: "50px" }}>
+      </Calendar>
 
-      <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-        <h3>My Event</h3>
+      <Popup trigger={buttonPopup}
+        setTrigger={setButtonPopup}
+        handleRemove={removeEventHandler}
+        clickEvent={clickEvent}
+        allEvents={allEvents}
+        clickEventArr={clickEventArr}>
       </Popup>
+
     </div>
   );
 }

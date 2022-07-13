@@ -42,3 +42,19 @@ div.react-datepicker-popper {
   top: 16px;
   right: 16px;
 }
+
+#close-btn-id {
+  background-color: transparent;
+}
+
+#remove-btn-id{
+  background-color: transparent;
+}
+
+#title-textarea{
+  resize: none;
+  background-color: transparent;
+  font-size: 14px;
+  border-radius: 1rem;
+  text-align: center;
+}
