@@ -2,7 +2,6 @@ import React from 'react'
 import PopupContent from './PopupContent';
 
 function Popup({ trigger, setTrigger, handleRemove, clickEvent, allEvents, getData}) {
-    console.log()
 
     return (trigger)
         ? (<div className='popup'>

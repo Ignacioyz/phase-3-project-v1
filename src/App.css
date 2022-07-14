@@ -52,9 +52,11 @@ div.react-datepicker-popper {
 }
 
 #title-textarea{
+  display: inline;
   resize: none;
   background-color: transparent;
   font-size: 14px;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   text-align: center;
+  
 }

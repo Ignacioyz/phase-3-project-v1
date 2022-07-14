@@ -23,9 +23,6 @@ const localizer = dateFnsLocalizer({
   locales
 })
 
-
-console.log(new Date)
-
 function App() {
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" })
   const [allEvents, setAllEvents] = useState([])
@@ -77,12 +74,6 @@ function App() {
 
 
   function removeEventHandler(e) {
-    // console.log(e)
-    // console.log(`removed ${e.id}`)
-    // setAllEvents(allEvents.filter((event) => {
-    //   return event.id !== e.id
-    // }))
-    // setButtonPopup(!buttonPopup)
     fetch(`http://localhost:4000/events/${e.id}`, {
       method: "DELETE",
       headers: {
@@ -99,7 +90,6 @@ function App() {
     setButtonPopup(true)
   }
 
-  console.log(allEvents)
 
   return (
     <div className="App">
