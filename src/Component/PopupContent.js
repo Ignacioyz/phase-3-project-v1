@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from 'react-datetime-picker'
 
-function PopupContent({eventDetail}) {
-    console.log(eventDetail)
+function PopupContent({eventDetail, getData}) {
+    console.log(getData)
 
     const [form, setForm] = useState(eventDetail.title)
     const [startForm, setStartForm] = useState(eventDetail.start)
@@ -10,6 +10,7 @@ function PopupContent({eventDetail}) {
 
     function handleChangeForm(e){
         setForm(e.target.value)
+        getData()
     }
 
     function handleChangeStartForm(e){

@@ -140,7 +140,8 @@ function App() {
         handleRemove={removeEventHandler}
         clickEvent={clickEvent}
         allEvents={allEvents}
-        clickEventArr={clickEventArr}>
+        clickEventArr={clickEventArr}
+        getData ={getData}>
       </Popup>
 
     </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import PopupContent from './PopupContent';
 
-function Popup({ trigger, setTrigger, handleRemove, clickEvent,allEvents, clickEventArr }) {
+function Popup({ trigger, setTrigger, handleRemove, clickEvent, allEvents, getData}) {
     console.log()
 
     return (trigger)
@@ -9,7 +9,7 @@ function Popup({ trigger, setTrigger, handleRemove, clickEvent,allEvents, clickE
             <div className='popup-inner'>
                 <button id='close-btn-id' className='close-btn' onClick={() => setTrigger(false)}>❌</button>
                 <PopupContent key={clickEvent.id} 
-                eventDetail = {clickEvent}/>
+                eventDetail = {clickEvent} getData = {getData}/>
                 <button id='remove-btn-id' onClick={() => handleRemove(clickEvent)}>🗑</button>
             </div>
         </div>)
